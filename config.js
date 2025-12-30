@@ -9,7 +9,7 @@ const CONFIG = {
     // 取得方法: https://openweathermap.org/api で無料登録
     // ========================================
     weather: {
-        apiKey: 'de09f9e9086456e1e8317b9a15618e7a',  // ← ここにAPIキーを入力
+        apiKey: 'YOUR_OPENWEATHERMAP_API_KEY',  // ← config.local.js で設定してください
         city: 'Tokyo',                           // 都市名（英語）
         units: 'metric',                         // metric: 摂氏, imperial: 華氏
         lang: 'ja'                               // 日本語表示
@@ -20,7 +20,7 @@ const CONFIG = {
     // 取得方法: https://unsplash.com/developers で無料登録
     // ========================================
     unsplash: {
-        accessKey: 'twpND1wbjc7hC50mmNxj7qvI5RSm8yfj49JWTRIoADE',  // ← ここにAccess Keyを入力
+        accessKey: 'YOUR_UNSPLASH_ACCESS_KEY',  // ← config.local.js で設定してください
         query: 'nature,landscape',               // 検索キーワード
         orientation: 'landscape'                 // landscape, portrait, squarish
     },

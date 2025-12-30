@@ -1,0 +1,19 @@
+# APIキーを含むローカル設定ファイル
+config.local.js
+
+# その他の機密情報
+*.secret
+*.secret.js
+
+# 環境変数ファイル
+.env
+.env.local
+.env.*.local
+
+# OS生成ファイル
+.DS_Store
+Thumbs.db
+
+# エディタ設定
+.vscode/
+.idea/
