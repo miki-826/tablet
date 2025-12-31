@@ -17,6 +17,91 @@ const state = {
 };
 
 // ========================================
+// API Key Management
+// ========================================
+function loadApiKeysFromStorage() {
+    const savedWeatherKey = localStorage.getItem('dashboard_weather_api_key');
+    const savedUnsplashKey = localStorage.getItem('dashboard_unsplash_api_key');
+
+    if (savedWeatherKey) {
+        CONFIG.weather.apiKey = savedWeatherKey;
+    }
+    if (savedUnsplashKey) {
+        CONFIG.unsplash.accessKey = savedUnsplashKey;
+    }
+}
+
+function saveApiKeys() {
+    const weatherKeyInput = document.getElementById('weather-api-key');
+    const unsplashKeyInput = document.getElementById('unsplash-api-key');
+    const statusEl = document.getElementById('api-status');
+
+    if (!weatherKeyInput || !unsplashKeyInput) return;
+
+    const weatherKey = weatherKeyInput.value.trim();
+    const unsplashKey = unsplashKeyInput.value.trim();
+
+    // Save to localStorage
+    if (weatherKey) {
+        localStorage.setItem('dashboard_weather_api_key', weatherKey);
+        CONFIG.weather.apiKey = weatherKey;
+    }
+    if (unsplashKey) {
+        localStorage.setItem('dashboard_unsplash_api_key', unsplashKey);
+        CONFIG.unsplash.accessKey = unsplashKey;
+    }
+
+    // Show success message
+    if (statusEl) {
+        statusEl.textContent = '✓ 保存しました！データを更新中...';
+        statusEl.className = 'api-status success';
+    }
+
+    // Refresh data with new API keys
+    fetchWeather();
+    fetchBackground();
+
+    // Clear status after 3 seconds
+    setTimeout(() => {
+        if (statusEl) {
+            statusEl.textContent = '';
+        }
+    }, 3000);
+}
+
+function initApiKeyInputs() {
+    const weatherKeyInput = document.getElementById('weather-api-key');
+    const unsplashKeyInput = document.getElementById('unsplash-api-key');
+    const saveBtn = document.getElementById('save-api-keys');
+
+    // Pre-fill with saved keys (masked)
+    if (weatherKeyInput) {
+        const savedKey = localStorage.getItem('dashboard_weather_api_key');
+        if (savedKey) {
+            weatherKeyInput.value = savedKey;
+        }
+    }
+    if (unsplashKeyInput) {
+        const savedKey = localStorage.getItem('dashboard_unsplash_api_key');
+        if (savedKey) {
+            unsplashKeyInput.value = savedKey;
+        }
+    }
+
+    // Save button click handler
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveApiKeys);
+    }
+}
+
+function hasValidApiKeys() {
+    return CONFIG.weather.apiKey &&
+        CONFIG.weather.apiKey !== 'YOUR_OPENWEATHERMAP_API_KEY' &&
+        CONFIG.unsplash.accessKey &&
+        CONFIG.unsplash.accessKey !== 'YOUR_UNSPLASH_ACCESS_KEY';
+}
+
+// ========================================
 // DOM Elements
 // ========================================
 const elements = {
@@ -978,11 +1063,17 @@ function initSearch() {
 async function init() {
     console.log('Dashboard initializing...');
 
+    // Load API keys from localStorage first
+    loadApiKeysFromStorage();
+
     // Initialize theme
     initTheme();
 
     // Initialize settings panel
     initSettings();
+
+    // Initialize API key inputs
+    initApiKeyInputs();
 
     // Initialize event listeners
     initEventListeners();
